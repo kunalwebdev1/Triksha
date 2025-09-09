@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Typography, Grid } from "@mui/material";
 import DashboardCard from "../../components/dashboard/DashboardCard";
-import { UserSidebar } from "../../components/layout/Navbar";
+import { HospitalSidebar } from "../../components/layout/Navbar";
 
-const PatientDashboard = () => (
+const HospitalDashboard = () => (
   <Box
     sx={{
       display: "flex",
@@ -12,14 +12,14 @@ const PatientDashboard = () => (
       flexDirection: { xs: "column", md: "row" },
     }}
   >
-    <UserSidebar />
+    <HospitalSidebar />
     <Box
       sx={{
         flex: 1,
         p: { xs: 2, md: 4 },
         width: "100%",
         minWidth: 0,
-        mt: { xs: 6, md: 0 },
+        mt: { xs: 6, md: 0 }, 
       }}
     >
       <Typography
@@ -29,32 +29,25 @@ const PatientDashboard = () => (
         sx={{ color: "#222", fontSize: { xs: 22, sm: 26 } }}
       >
         Good Morning<br />
-        <span style={{ color: "#444", fontWeight: 600 }}>Mitendra Singh</span>
+        <span style={{ color: "#444", fontWeight: 600 }}>Hospital Admin</span>
       </Typography>
       <Grid container spacing={2} mb={3}>
         <Grid item xs={12} sm={6} md={3}>
-          <DashboardCard title="Today's Appointments" value={1} />
+          <DashboardCard title="New Admissions" value={12} />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <DashboardCard title="Upcoming Appointments" value={2} />
+          <DashboardCard title="Discharges" value={8} />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <DashboardCard title="Total Appointments" value={5} />
+          <DashboardCard title="Available Beds" value={34} />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <DashboardCard title="Nearby HealthCare Providers" value="4" />
+          <DashboardCard title="Staff On Duty" value={15} />
         </Grid>
       </Grid>
-      <Typography variant="h6" mt={4} mb={2} sx={{ color: "#333" }}>
-        Recent Activity
-      </Typography>
-      {/* ...Recent activity list... */}
-      <Typography variant="h6" mt={4} mb={2} sx={{ color: "#333" }}>
-        Quick Actions
-      </Typography>
-      {/* ...Quick actions grid... */}
+      {/* Add more hospital-specific sections here */}
     </Box>
   </Box>
 );
 
-export default PatientDashboard;
+export default HospitalDashboard;

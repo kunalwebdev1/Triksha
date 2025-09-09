@@ -2,10 +2,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Button } from "@mui/material";
 import image from "../../assets/logos/logo-3.png";
+import { UserSidebar } from "../../components/layout/Navbar";
 
 const Splash = () => {
   const navigate = useNavigate();
-
   const handleGetStarted = () => {
     navigate("/signup");
   };

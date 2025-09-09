@@ -1,5 +1,5 @@
-import axios from "./axiosConfig";
+// src/api/authAPI.js
+import axiosInstance from "./axiosConfig";
 
-export const loginUser = (credentials) => axios.post("/auth/login", credentials);
-export const signupUser = (data) => axios.post("/auth/signup", data);
-export const logoutUser = () => axios.post("/auth/logout");
+export const signup = (data) => axiosInstance.post("/api/users/register/", data);
+export const loginAPI = (data) => axiosInstance.post("/api/users/login/", data);

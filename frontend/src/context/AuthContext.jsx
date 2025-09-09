@@ -6,14 +6,15 @@ export const AuthContext = createContext();
 // Provider
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // null = not logged in
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Optional: load from localStorage on refresh
-    const savedUser = localStorage.getItem("triksha_user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-  }, []);
+useEffect(() => {
+  const savedUser = localStorage.getItem("triksha_user");
+  if (savedUser) {
+    setUser(JSON.parse(savedUser));
+  }
+  setLoading(false);
+}, []);
 
   const login = (userData) => {
     setUser(userData);
@@ -26,7 +27,15 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        logout,
+        isAuthenticated: !!user,
+        loading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
