@@ -7,12 +7,11 @@ import { useNavigate } from "react-router-dom";
 const roles = [
   "Patient",
   "Doctor",
-  "Hospital/Clinic",
-  "Pharmacy",
+  "Hospital/Clinic Admin",
+  "Pharmacy Admin",
   "Caregiver",
-  "Laboratory",
-  "Insurance",
-  "Administrator",
+  "Laboratory Admin",
+  "Insurance TPA",
 ];
 
 const SignupForm = () => {

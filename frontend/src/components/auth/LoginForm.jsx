@@ -57,10 +57,19 @@ const LoginForm = () => {
       } else if (
         userData.role === "Hospital" ||
         userData.role === "Clinic" ||
-        userData.role === "Hospital/Clinic"
+        userData.role === "Hospital/Clinic Admin"
       ) {
         navigate("/hospital/dashboard");
-      } else {
+      } else if (userData.role === "Laboratory Admin") {
+        navigate("/lab/dashboard");
+      } else if (userData.role === "Pharmacy Admin") {
+        navigate("/pharmacy/dashboard");
+      } else if (userData.role === "Caregiver") {
+        navigate("/caregiver/dashboard");
+      } else if (userData.role === "Insurance TPA") {
+        navigate("/insurance/dashboard");
+      }
+      else {
         navigate("/patient/dashboard");
       }
     } catch (err) {
@@ -181,7 +190,7 @@ const LoginForm = () => {
           helperText={fieldErrors.password}
         />
         <Box display="flex" justifyContent="flex-end" mt={1}>
-          <Link href="#" underline="hover" fontSize={13}>
+          <Link href="/forgetpassword" underline="hover" fontSize={13}>
             Forgot password?
           </Link>
         </Box>

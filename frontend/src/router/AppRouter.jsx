@@ -8,6 +8,14 @@ import Splash from "../pages/Splash/Splash";
 import PatientDashboard from "../pages/Dashboard/PatientDashboard";
 import DoctorDashboard from "../pages/Dashboard/DoctorDashboard";
 import HospitalDashboard from "../pages/Dashboard/HospitalDashboard";
+import LabDashboard from "../pages/Dashboard/LaboratoryDashboard";
+import PharmacyDashboard from "../pages/Dashboard/PharmacyDashboard";
+import CaregiverDashboard from "../pages/Dashboard/CaregiverDashboard";
+import InsuranceDashboard from "../pages/Dashboard/InsuranceDashboard";
+import Notifications from "../pages/Notifications/Notifications";
+import UserProfileCard from "../components/profile/UserProfileCard";
+import Settings from "../pages/Settings/Settings";
+import ForgetPassword from "../components/auth/ForgetPasswordForm";
 
 // Protected/Role-based routes
 import ProtectedRoute from "./ProtectedRoute";
@@ -21,6 +29,10 @@ function DashboardRedirect() {
   if (user.role === "Doctor") return <Navigate to="/doctor/dashboard" />;
   if (user.role === "Hospital" || user.role === "Clinic" || user.role === "Hospital/Clinic")
     return <Navigate to="/hospital/dashboard" />;
+  if (user.role === "Laboratory Admin") return <Navigate to="/lab/dashboard" />;
+  if (user.role === "Pharmacy Admin") return <Navigate to="/pharmacy/dashboard" />;
+  if (user.role === "Caregiver") return <Navigate to="/caregiver/dashboard" />;
+  if (user.role === "Insurance TPA") return <Navigate to="/insurance/dashboard" />;
   return <Navigate to="/patient/dashboard" />;
 }
 
@@ -31,9 +43,13 @@ export default function AppRouter() {
       <Route path="/splash" element={<Splash />} />
       <Route path="/login" element={<LoginForm />} />
       <Route path="/signup" element={<SignupForm />} />
+      <Route path="/notifications" element={<Notifications />} />
+      <Route path="/profile" element={<UserProfileCard />} />
+      <Route path="/settings" element={<Settings />} />
+      <Route path="/forgetpassword" element={<ForgetPassword />} />
 
       <Route
-        path="/patient/dashboard"
+        path="patient/dashboard"
         element={
           <ProtectedRoute>
             <RoleBasedRoute allowedRoles={["Patient"]}>
@@ -56,12 +72,53 @@ export default function AppRouter() {
         path="/hospital/dashboard"
         element={
           <ProtectedRoute>
-            <RoleBasedRoute allowedRoles={["Hospital", "Clinic", "Hospital/Clinic"]}>
+            <RoleBasedRoute allowedRoles={["Hospital", "Clinic", "Hospital/Clinic Admin"]}>
               <HospitalDashboard />
             </RoleBasedRoute>
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/lab/dashboard"
+        element={
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={["Laboratory Admin"]}>
+              <LabDashboard />  
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        }
+      />  
+      <Route
+        path="/pharmacy/dashboard"
+        element={
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={["Pharmacy Admin"]}>
+              <PharmacyDashboard />
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        }   
+      />
+      <Route
+        path="/caregiver/dashboard" 
+        element={
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={["Caregiver"]}>
+              <CaregiverDashboard />
+            </RoleBasedRoute>
+          </ProtectedRoute> 
+        }
+      />
+      <Route
+        path="/insurance/dashboard"
+        element={
+          <ProtectedRoute>
+            <RoleBasedRoute allowedRoles={["Insurance TPA"]}>
+              <InsuranceDashboard />
+            </RoleBasedRoute>
+          </ProtectedRoute>
+        }
+      />
+      
 
       {/* Redirect authenticated users to their dashboard */}
       <Route
