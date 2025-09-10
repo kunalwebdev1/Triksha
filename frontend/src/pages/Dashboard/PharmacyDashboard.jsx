@@ -1,14 +1,14 @@
 import React from "react";
 import { Box, Typography, Grid } from "@mui/material";
 import DashboardCard from "../../components/dashboard/DashboardCard";
-import { DoctorSidebar } from "../../components/layout/Navbar";
+import { PharmacySidebar } from "../../components/layout/Navbar";
 import HeaderBar from "../../components/layout/Header";
 
 const PharmacyDashboard = () => (
   <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
     <HeaderBar />
     <Box sx={{ display: "flex", flex: 1, pt: "64px" }}>
-        <DoctorSidebar />
+        <PharmacySidebar />
       <Box
         sx={{
           flex: 1,
