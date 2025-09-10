@@ -34,13 +34,8 @@ export default function HeaderBar({ userName = "Kunal" }) {
 
   // 🔹 Logout logic
   const handleLogout = () => {
-    // Clear any stored tokens or user data
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
-
-    // If you use Context/AuthProvider, also reset state here
-    // logoutUser();  // <-- if you have a context function
-
     handleMenuClose();
     navigate("/login");
   };
@@ -65,8 +60,22 @@ export default function HeaderBar({ userName = "Kunal" }) {
           minHeight: 50,
         }}
       >
-        {/* Left side (Search) */}
-        <Box sx={{ flex: 1, display: "flex", alignItems: "center" }}>
+        {/* Logo shifted slightly left */}
+        <Box sx={{ flexShrink: 0, display: "flex", alignItems: "center", mr: 2 }}>
+          <img src={logo} alt="Triksha Logo" style={{ width: 115 }} />
+        </Box>
+
+        {/* Right side with search, notifications, AI, avatar */}
+        <Box
+          sx={{
+            flex: 1,
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          {/* Search bar before notification bell */}
           {!isMobile && (
             <Box
               sx={{
@@ -76,8 +85,7 @@ export default function HeaderBar({ userName = "Kunal" }) {
                 borderRadius: "50px",
                 backgroundColor: "rgba(0,0,0,0.05)",
                 "&:hover": { backgroundColor: "rgba(0,0,0,0.1)" },
-                width: "50%",
-                ml: 2,
+                width: "40%",
                 mr: 2,
               }}
             >
@@ -105,23 +113,7 @@ export default function HeaderBar({ userName = "Kunal" }) {
               />
             </Box>
           )}
-        </Box>
 
-        {/* Centered Logo */}
-        <Box sx={{ flexShrink: 0, display: "flex", justifyContent: "center" }}>
-          <img src={logo} alt="Triksha Logo" style={{ width: 125 }} />
-        </Box>
-
-        {/* Right side */}
-        <Box
-          sx={{
-            flex: 1,
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            gap: 2,
-          }}
-        >
           {isMobile && (
             <IconButton color="primary:main">
               <SearchIcon />
@@ -129,10 +121,7 @@ export default function HeaderBar({ userName = "Kunal" }) {
           )}
 
           {/* Notifications */}
-          <IconButton
-            color="primary:main"
-            onClick={() => navigate("/notifications")}
-          >
+          <IconButton color="primary:main" onClick={() => navigate("/notifications")}>
             <Badge badgeContent={0} color="error">
               <NotificationsIcon />
             </Badge>
