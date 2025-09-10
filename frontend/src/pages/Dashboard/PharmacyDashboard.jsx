@@ -1,10 +1,13 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Box, Typography, Grid } from "@mui/material";
 import DashboardCard from "../../components/dashboard/DashboardCard";
 import { PharmacySidebar } from "../../components/layout/Navbar";
 import HeaderBar from "../../components/layout/Header";
+import { AuthContext } from "../../context/AuthContext";
 
-const PharmacyDashboard = () => (
+const PharmacyDashboard = () => {
+  const { user } = useContext(AuthContext);
+  return (
   <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
     <HeaderBar />
     <Box sx={{ display: "flex", flex: 1, pt: "64px" }}>
@@ -24,9 +27,9 @@ const PharmacyDashboard = () => (
           mb={2}
           sx={{ color: "#222", fontSize: { xs: 22, sm: 26 } }}
         >
-          Good Morning <br />
+          Greetings <br />
           <span style={{ color: "#444", fontWeight: 600 }}>
-            Dr. Anupam Kumar
+            {user?.name || "Guest"}
           </span>
         </Typography>
 
@@ -48,5 +51,6 @@ const PharmacyDashboard = () => (
     </Box>
   </Box>
 );
+};
 
 export default PharmacyDashboard;

@@ -45,6 +45,8 @@ const LoginForm = () => {
       const res = await loginAPI(form);
 
       const userData = {
+        id : res.data.id,
+        name: res.data.name,
         email: res.data.email,
         role: res.data.role,
         token: res.data.token,
@@ -57,7 +59,8 @@ const LoginForm = () => {
       } else if (
         userData.role === "Hospital" ||
         userData.role === "Clinic" ||
-        userData.role === "Hospital/Clinic Admin"
+        userData.role === "Hospital/Clinic Admin" ||
+        userData.role === "Hospital/Clinic"
       ) {
         navigate("/hospital/dashboard");
       } else if (userData.role === "Laboratory Admin") {

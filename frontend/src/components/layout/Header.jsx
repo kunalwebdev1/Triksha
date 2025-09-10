@@ -18,11 +18,10 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import logo from "../../assets/logos/Triksha-text.png";
 import { useNavigate } from "react-router-dom";
 
-export default function HeaderBar({ userName = "Kunal" }) {
+export default function HeaderBar({ userName = "" }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const userInitial = userName.charAt(0).toUpperCase();
-
+  const userInitial = userName ? userName.charAt(0).toUpperCase() : "?";
   const navigate = useNavigate();
 
   // State for menu

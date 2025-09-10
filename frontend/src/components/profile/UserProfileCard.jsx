@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, Typography, Grid, Card, CardContent, Avatar } from "@mui/material";
 import { UserSidebar } from "../../components/layout/Navbar";
 import HeaderBar from "../../components/layout/Header";
+import { AuthContext } from "../../context/AuthContext";
 
 const UserProfileCard = ({ name, email, role }) => (
   <Card sx={{ p: 2, boxShadow: 3, borderRadius: 1 }}>
@@ -16,35 +17,31 @@ const UserProfileCard = ({ name, email, role }) => (
           fontSize: 28,
         }}
       >
-        {name.charAt(0)}
+        {name?.charAt(0) || "G"}
       </Avatar>
       <Typography variant="h6" fontWeight={700}>
-        {name}
+        {name || "Guest"}
       </Typography>
       <Typography variant="body2" color="text.secondary">
-        {email}
+        {email || "guest@example.com"}
       </Typography>
       <Typography
         variant="caption"
         sx={{ mt: 1, display: "block", color: "primary.main" }}
       >
-        {role}
+        {role || "User"}
       </Typography>
     </CardContent>
   </Card>
 );
 
 const UserProfilePage = () => {
-  const user = {
-    name: "Kunal Maheshwari",
-    email: "kunal@example.com",
-    role: "Software Developer",
-  };
+  const { user } = useContext(AuthContext); // Get user from context
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-      {/* Prebuilt Header */}
-      <HeaderBar userName={user.name} />
+      {/* Header with dynamic user name */}
+      <HeaderBar userName={user?.name || user?.email || "Guest"} />
 
       {/* Sidebar + Main Content */}
       <Box sx={{ display: "flex", flex: 1, pt: "64px" }}>
@@ -66,17 +63,19 @@ const UserProfilePage = () => {
             mb={3}
             sx={{ color: "#222", fontSize: { xs: 22, sm: 26 } }}
           >
-            Good Morning <br />
-            <span style={{ color: "#444", fontWeight: 600 }}>{user.name}</span>
+            Greetings <br />
+            <span style={{ color: "#444", fontWeight: 600 }}>
+              {user?.name || "Guest"}
+            </span>
           </Typography>
 
           {/* Profile + Activity */}
           <Grid container spacing={3} mb={4}>
             <Grid item xs={12} md={4}>
               <UserProfileCard
-                name={user.name}
-                email={user.email}
-                role={user.role}
+                name={user?.name}
+                email={user?.email}
+                role={user?.role}
               />
             </Grid>
             <Grid item xs={12} md={8}>
