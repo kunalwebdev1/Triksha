@@ -61,7 +61,6 @@ const userLinks = [
   { to: "/chat", icon: <ChatIcon />, label: "Chat With Doctors", badge: 1 },
   { to: "/appointment", icon: <EventAvailableIcon />, label: "Appointment" },
   { to: "/doctors", icon: <PeopleIcon />, label: "Doctors" },
-  { to: "/room-allotment", icon: <LocalHospitalIcon />, label: "Room Allotment" },
   { to: "/payments", icon: <PaymentIcon />, label: "Payments" },
   { to: "/medical-history", icon: <HistoryIcon />, label: "Medical History" },
   { to: "/emergency", icon: <EmergencyIcon />, label: "Emergency Services" },
@@ -102,6 +101,36 @@ const Lablinks = [
   { to: "staff", icon: <GroupIcon />, label: "Staff" },
   { to: "/patients", icon: <PeopleIcon />, label: "Patients" },
   { to: "/billingclaims", icon: <PaymentIcon />, label: "Billing & Claims" },
+  { to: "/feedback", icon: <FeedbackIcon />, label: "Feedback" },
+];
+
+const Caregiverlinks = [
+  { to: "/caregiver/dashboard", icon: <DashboardIcon />, label: "Dashboard" },
+  { to: "/patients", icon: <PeopleIcon />, label: "Patients" },
+  { to: "/appointments", icon: <EventAvailableIcon />, label: "Appointments" },
+  { to: "/medications", icon: <ScienceIcon />, label: "Medications" },
+  { to: "/reports", icon: <SummarizeIcon />, label: "Reports" },
+  { to: "/billing", icon: <PaymentIcon />, label: "Billing" },
+  { to: "/feedback", icon: <FeedbackIcon />, label: "Feedback" },
+];
+
+const InsuranceLinks = [
+  { to: "/insurance/dashboard", icon: <DashboardIcon />, label: "Dashboard" },
+  { to: "/policies", icon: <Inventory2Icon />, label: "Policies" }, 
+  { to: "/claims", icon: <PaymentIcon />, label: "Claims" },
+  { to: "/customers", icon: <PeopleIcon />, label: "Customers" },
+  { to: "/reports", icon: <SummarizeIcon />, label: "Reports" },
+  { to: "/feedback", icon: <FeedbackIcon />, label: "Feedback" },
+];
+
+const PharmacyLinks = [
+  { to: "/pharmacy/dashboard", icon: <DashboardIcon />, label: "Dashboard" },
+  { to: "/inventory", icon: <Inventory2Icon />, label: "Inventory" },
+  { to: "/orders", icon: <EventAvailableIcon />, label: "Orders" },
+  { to: "/suppliers", icon: <PeopleIcon />, label: "Suppliers" },
+  { to: "/sales", icon: <PaymentIcon />, label: "Sales" },
+  { to: "/billing", icon: <PaymentIcon />, label: "Billing" },
+  { to: "/reports", icon: <SummarizeIcon />, label: "Reports" },
   { to: "/feedback", icon: <FeedbackIcon />, label: "Feedback" },
 ];
 
@@ -185,4 +214,13 @@ export function HospitalSidebar(props) {
 }
 export function LabSidebar(props) {
   return <ResponsiveSidebar links={Lablinks} {...props} />;
+}
+export function CaregiverSidebar(props) {
+  return <ResponsiveSidebar links={Caregiverlinks} {...props} />;
+} 
+export function InsuranceSidebar(props) {
+  return <ResponsiveSidebar links={InsuranceLinks} {...props} />;
+} 
+export function PharmacySidebar(props) {
+  return <ResponsiveSidebar links={PharmacyLinks} {...props} />;
 }
