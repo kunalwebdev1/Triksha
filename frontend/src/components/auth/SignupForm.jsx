@@ -63,7 +63,7 @@ if (!validateForm()) return;
     try {
       await signup(form);
       setSuccess("Signup successful! Redirecting to login...");
-      setTimeout(() => navigate("/login"), 1200);
+      setTimeout(() => navigate("/login"), 200);
     } catch (err) {
       setErrors(err.response?.data?.detail || "Signup failed. Please try again.");
       setErrors({ general: backendError });

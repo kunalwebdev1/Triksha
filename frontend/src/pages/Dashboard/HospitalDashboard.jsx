@@ -9,7 +9,7 @@ const HospitalDashboard = () => {
   const { user } = useContext(AuthContext);
   return (
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-      <HeaderBar />
+    <HeaderBar userName={user?.name || user?.email} />
       <Box sx={{ display: "flex", flex: 1, pt: "64px" }}>
         <HospitalSidebar />
             <Box
@@ -44,6 +44,9 @@ const HospitalDashboard = () => {
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <DashboardCard title="Staff On Duty" value={15} />
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <DashboardCard title="Dcotors On Duty" value={25} />
             </Grid>
           </Grid>
           {/* Add more hospital-specific sections here */}

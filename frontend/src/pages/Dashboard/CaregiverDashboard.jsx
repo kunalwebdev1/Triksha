@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Box, Typography, Grid } from "@mui/material";
 import DashboardCard from "../../components/dashboard/DashboardCard";
 import { CaregiverSidebar } from "../../components/layout/Navbar";
@@ -35,16 +35,16 @@ const CaregiverDashboard = () => {
 
           <Grid container spacing={2} mb={3}>
             <Grid item xs={12} sm={6} md={3}>
-              <DashboardCard title="New Patients" value={125} />
+              <DashboardCard title="Patients" value={5} />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <DashboardCard title="OPD Patients" value={218} />
+              <DashboardCard title="New Patients" value={2} />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <DashboardCard title="Today's Operations" value={25} />
+              <DashboardCard title="Today's Patirnts" value={3} />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <DashboardCard title="Visitors" value={2479} />
+              <DashboardCard title="Revenue" value={15000} />
             </Grid>
           </Grid>
         </Box>

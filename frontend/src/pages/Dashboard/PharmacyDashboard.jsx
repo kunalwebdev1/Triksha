@@ -9,7 +9,7 @@ const PharmacyDashboard = () => {
   const { user } = useContext(AuthContext);
   return (
   <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-    <HeaderBar />
+    <HeaderBar userName={user?.name || user?.email} />
     <Box sx={{ display: "flex", flex: 1, pt: "64px" }}>
         <PharmacySidebar />
       <Box
@@ -35,16 +35,16 @@ const PharmacyDashboard = () => {
 
         <Grid container spacing={2} mb={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <DashboardCard title="New Patients" value={125} />
+            <DashboardCard title="Drugs" value={759} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <DashboardCard title="OPD Patients" value={218} />
+            <DashboardCard title="Patients" value={2000} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <DashboardCard title="Today's Operations" value={25} />
+            <DashboardCard title="Today's Stock" value={3509} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <DashboardCard title="Visitors" value={2479} />
+            <DashboardCard title="Revenue This month" value={250000} />
           </Grid>
         </Grid>
       </Box>
