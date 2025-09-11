@@ -12,7 +12,7 @@ import LabDashboard from "../pages/Dashboard/LaboratoryDashboard";
 import PharmacyDashboard from "../pages/Dashboard/PharmacyDashboard";
 import CaregiverDashboard from "../pages/Dashboard/CaregiverDashboard";
 import InsuranceDashboard from "../pages/Dashboard/InsuranceDashboard";
-import Notifications from "../pages/Notifications/Notifications";
+// import Notifications from "../pages/Notifications/Notifications";
 import UserProfileCard from "../components/profile/UserProfileCard";
 import Settings from "../pages/Settings/Settings";
 import ForgetPassword from "../components/auth/ForgetPasswordForm";
@@ -44,7 +44,7 @@ export default function AppRouter() {
       <Route path="/splash" element={<Splash />} />
       <Route path="/login" element={<LoginForm />} />
       <Route path="/signup" element={<SignupForm />} />
-      <Route path="/notifications" element={<Notifications />} />
+      {/* <Route path="/notifications" element={<Notifications />} /> */}
       <Route path="/profile" element={<UserProfileCard />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/forgetpassword" element={<ForgetPassword />} />
