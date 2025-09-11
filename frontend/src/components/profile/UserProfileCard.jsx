@@ -1,6 +1,9 @@
 import React, { useContext } from "react";
 import { Box, Typography, Grid, Card, CardContent, Avatar } from "@mui/material";
-import { UserSidebar } from "../../components/layout/Navbar";
+
+// Import all sidebars
+import { UserSidebar, DoctorSidebar, CaregiverSidebar, HospitalSidebar, PharmacySidebar, LabSidebar, InsuranceSidebar } from "../../components/layout/Navbar";
+
 import HeaderBar from "../../components/layout/Header";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -35,6 +38,28 @@ const UserProfileCard = ({ name, email, role }) => (
   </Card>
 );
 
+// Role-based sidebar renderer
+const RoleBasedSidebar = ({ role }) => {
+  switch (role) {
+    case "Doctor":
+      return <DoctorSidebar />;
+    case "Hospital":
+    case "Clinic":
+    case "Hospital/Clinic Admin":
+      return <HospitalSidebar />;
+    case "Laboratory Admin":
+      return <LabSidebar />;
+    case "Pharmacy Admin":
+      return <PharmacySidebar />;
+    case "Caregiver":
+      return <CaregiverSidebar />;
+    case "Insurance TPA":
+      return <InsuranceSidebar />;
+    default:
+      return <UserSidebar />; // fallback = patient/user
+  }
+};
+
 const UserProfilePage = () => {
   const { user } = useContext(AuthContext); // Get user from context
 
@@ -45,7 +70,8 @@ const UserProfilePage = () => {
 
       {/* Sidebar + Main Content */}
       <Box sx={{ display: "flex", flex: 1, pt: "64px" }}>
-        <UserSidebar />
+        {/* ✅ Sidebar changes based on role */}
+        <RoleBasedSidebar role={user?.role} />
 
         <Box
           sx={{
