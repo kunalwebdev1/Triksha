@@ -16,6 +16,7 @@ import Notifications from "../pages/Notifications/Notifications";
 import UserProfileCard from "../components/profile/UserProfileCard";
 import Settings from "../pages/Settings/Settings";
 import ForgetPassword from "../components/auth/ForgetPasswordForm";
+import NotFoundPage from "../pages/Splash/PageNotFound";
 
 // Protected/Role-based routes
 import ProtectedRoute from "./ProtectedRoute";
@@ -131,7 +132,8 @@ export default function AppRouter() {
       />
 
       {/* Catch-all */}
-      <Route path="*" element={<Navigate to="/login" />} />
+      // Catch-all route for 404
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }
