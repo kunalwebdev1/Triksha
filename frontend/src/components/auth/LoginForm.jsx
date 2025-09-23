@@ -65,11 +65,12 @@ const LoginForm = () => {
         navigate("/hospital/dashboard");
       } else if (userData.role === "Laboratory Admin") {
         navigate("/lab/dashboard");
-      } else if (userData.role === "Pharmacy Admin") {
-        navigate("/pharmacy/dashboard");
-      } else if (userData.role === "Caregiver") {
-        navigate("/caregiver/dashboard");
-      } else if (userData.role === "Insurance TPA") {
+      } //  else if (userData.role === "Pharmacy Admin") {
+      //   navigate("/pharmacy/dashboard");
+      // } else if (userData.role === "Caregiver") {
+      //   navigate("/caregiver/dashboard");
+      // } 
+      else if (userData.role === "Insurance TPA") {
         navigate("/insurance/dashboard");
       }
       else {

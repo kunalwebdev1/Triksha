@@ -9,8 +9,8 @@ import PatientDashboard from "../pages/Dashboard/PatientDashboard";
 import DoctorDashboard from "../pages/Dashboard/DoctorDashboard";
 import HospitalDashboard from "../pages/Dashboard/HospitalDashboard";
 import LabDashboard from "../pages/Dashboard/LaboratoryDashboard";
-import PharmacyDashboard from "../pages/Dashboard/PharmacyDashboard";
-import CaregiverDashboard from "../pages/Dashboard/CaregiverDashboard";
+// import PharmacyDashboard from "../pages/Dashboard/PharmacyDashboard";
+// import CaregiverDashboard from "../pages/Dashboard/CaregiverDashboard";
 import InsuranceDashboard from "../pages/Dashboard/InsuranceDashboard";
 // import Notifications from "../pages/Notifications/Notifications";
 import UserProfileCard from "../components/profile/UserProfileCard";
@@ -89,7 +89,7 @@ export default function AppRouter() {
           </ProtectedRoute>
         }
       />  
-      <Route
+      {/* <Route
         path="/pharmacy/dashboard"
         element={
           <ProtectedRoute>
@@ -108,7 +108,7 @@ export default function AppRouter() {
             </RoleBasedRoute>
           </ProtectedRoute> 
         }
-      />
+      /> */}
       <Route
         path="/insurance/dashboard"
         element={

@@ -8,8 +8,8 @@ const roles = [
   "Patient",
   "Doctor",
   "Hospital/Clinic Admin",
-  "Pharmacy Admin",
-  "Caregiver",
+  // "Pharmacy Admin",
+  // "Caregiver",
   "Laboratory Admin",
   "Insurance TPA",
 ];
