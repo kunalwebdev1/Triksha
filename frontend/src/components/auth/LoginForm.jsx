@@ -18,7 +18,7 @@ const LoginForm = () => {
   };
 
   const validate = () => {
-    let errors = {};
+    const errors = {};
     if (!form.email) {
       errors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(form.email)) {
@@ -39,47 +39,48 @@ const LoginForm = () => {
     e.preventDefault();
     setError("");
 
-    if (!validate()) return; // stop if validation fails
+    if (!validate()) return;
 
     try {
       const res = await loginAPI(form);
 
+      // Get the user object from API
+      const user = res.data.user;
+
+      // Optionally include the token if your API returns it
       const userData = {
-        id : res.data.id,
-        name: res.data.name,
-        email: res.data.email,
-        role: res.data.role,
-        token: res.data.token,
+        ...user,
+        token: res.data.token || "", // token might be empty if API doesn't return it
       };
 
+      // Use your login context function if needed
       login(userData);
 
-      if (userData.role === "Doctor") {
-        navigate("/doctor/dashboard");
-      } else if (
-        userData.role === "Hospital" ||
-        userData.role === "Clinic" ||
-        userData.role === "Hospital/Clinic Admin" ||
-        userData.role === "Hospital/Clinic"
-      ) {
-        navigate("/hospital/dashboard");
-      } else if (userData.role === "Laboratory Admin") {
-        navigate("/lab/dashboard");
-      } //  else if (userData.role === "Pharmacy Admin") {
-      //   navigate("/pharmacy/dashboard");
-      // } else if (userData.role === "Caregiver") {
-      //   navigate("/caregiver/dashboard");
-      // } 
-      else if (userData.role === "Insurance TPA") {
-        navigate("/insurance/dashboard");
-      }
-      else {
-        navigate("/patient/dashboard");
+      // Navigate based on role
+      switch (userData.role) {
+        case "Doctor":
+          navigate("/doctor/dashboard");
+          break;
+        case "Hospital":
+        case "Clinic":
+        case "Hospital/Clinic Admin":
+        case "Hospital/Clinic":
+          navigate("/hospital/dashboard");
+          break;
+        case "Laboratory Admin":
+          navigate("/lab/dashboard");
+          break;
+        case "Insurance TPA":
+          navigate("/insurance/dashboard");
+          break;
+        default:
+          navigate("/patient/dashboard");
       }
     } catch (err) {
       setError(err.response?.data?.detail || "Login failed. Please try again.");
     }
   };
+
 
   return (
     <Box
@@ -94,7 +95,7 @@ const LoginForm = () => {
         p: { xs: 1, sm: 2 },
       }}
     >
-      {/* Left branding section */}
+      {/* Left branding */}
       <Box
         sx={{
           flex: 1,
@@ -105,26 +106,11 @@ const LoginForm = () => {
           mb: { xs: 4, md: 0 },
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            mb: 1,
-          }}
-        >
-          <img
-            src={tlogo}
-            alt="Triksha"
-            style={{
-              width: "100%",
-              maxWidth: 500,
-              minWidth: 180,
-              marginBottom: 8,
-            }}
-          />
-        </Box>
+        <img
+          src={tlogo}
+          alt="Triksha"
+          style={{ width: "100%", maxWidth: 500, minWidth: 180, marginBottom: 8 }}
+        />
         <Typography
           sx={{
             fontSize: { xs: 18, sm: 20, md: 22 },
@@ -138,7 +124,7 @@ const LoginForm = () => {
         </Typography>
       </Box>
 
-      {/* Right login form section */}
+      {/* Login Form */}
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -157,20 +143,22 @@ const LoginForm = () => {
         }}
       >
         <Typography variant="h5" align="center" fontWeight={700} mb={3}>
-          Login Page
+          Login
         </Typography>
+
         {error && (
           <Typography color="error" mb={1}>
             {error}
           </Typography>
         )}
+
         <Typography fontWeight={500} mb={0.5}>
-          Your email
+          Email
         </Typography>
         <TextField
           fullWidth
           margin="dense"
-          placeholder="Enter Email"
+          placeholder="Enter your email"
           name="email"
           value={form.email}
           onChange={handleChange}
@@ -178,6 +166,7 @@ const LoginForm = () => {
           error={!!fieldErrors.email}
           helperText={fieldErrors.email}
         />
+
         <Typography fontWeight={500} mt={2} mb={0.5}>
           Password
         </Typography>
@@ -185,7 +174,7 @@ const LoginForm = () => {
           fullWidth
           type="password"
           margin="dense"
-          placeholder="Enter Password"
+          placeholder="Enter your password"
           name="password"
           value={form.password}
           onChange={handleChange}
@@ -193,11 +182,13 @@ const LoginForm = () => {
           error={!!fieldErrors.password}
           helperText={fieldErrors.password}
         />
+
         <Box display="flex" justifyContent="flex-end" mt={1}>
           <Link href="/forgetpassword" underline="hover" fontSize={13}>
             Forgot password?
           </Link>
         </Box>
+
         <Button
           type="submit"
           variant="contained"
@@ -216,6 +207,7 @@ const LoginForm = () => {
         >
           Sign In
         </Button>
+
         <Typography align="center" mt={3} fontSize={14}>
           Not joined us yet?{" "}
           <Link href="/signup" underline="hover" color="#B2005E" fontWeight={600}>

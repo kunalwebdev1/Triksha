@@ -9,8 +9,13 @@ class RegisterView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "Registered successfully"}, status=status.HTTP_201_CREATED)
+            user = serializer.save()
+            # Return all user data except password
+            user_data = UserSerializer(user).data
+            return Response({
+                "message": "Registered successfully",
+                "user": user_data
+            }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
@@ -19,6 +24,10 @@ class LoginView(APIView):
         password = request.data.get("password")
         user = authenticate(request, username=email, password=password)
         if user is not None:
-            # You can return more user info as needed
-            return Response({"message": "Login successful", "role": user.role, "id": user.id, "name": user.name , "email": user.email}, status=status.HTTP_200_OK)
+            # Return all user data except password
+            user_data = UserSerializer(user).data
+            return Response({
+                "message": "Login successful",
+                "user": user_data
+            }, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)

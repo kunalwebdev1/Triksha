@@ -1,13 +1,17 @@
-import React, { useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Grid, Card, CardContent, Avatar } from "@mui/material";
-
-// Import all sidebars
-import { UserSidebar, DoctorSidebar, CaregiverSidebar, HospitalSidebar, PharmacySidebar, LabSidebar, InsuranceSidebar } from "../../components/layout/Navbar";
-
+import {
+  UserSidebar,
+  DoctorSidebar,
+  CaregiverSidebar,
+  HospitalSidebar,
+  PharmacySidebar,
+  LabSidebar,
+  InsuranceSidebar,
+} from "../../components/layout/Navbar";
 import HeaderBar from "../../components/layout/Header";
-import { AuthContext } from "../../context/AuthContext";
 
-const UserProfileCard = ({ name, email, role }) => (
+const UserProfileCard = ({ user }) => (
   <Card sx={{ p: 2, boxShadow: 3, borderRadius: 1 }}>
     <CardContent sx={{ textAlign: "center" }}>
       <Avatar
@@ -20,25 +24,36 @@ const UserProfileCard = ({ name, email, role }) => (
           fontSize: 28,
         }}
       >
-        {name?.charAt(0) || "G"}
+        {user?.name?.charAt(0) || "G"}
       </Avatar>
       <Typography variant="h6" fontWeight={700}>
-        {name || "Guest"}
+        {user?.name || "Guest"}
       </Typography>
       <Typography variant="body2" color="text.secondary">
-        {email || "guest@example.com"}
+        {user?.email || "guest@example.com"}
       </Typography>
       <Typography
         variant="caption"
         sx={{ mt: 1, display: "block", color: "primary.main" }}
       >
-        {role || "User"}
+        {user?.role || "User"}
       </Typography>
+      <Box sx={{ mt: 2, textAlign: "left" }}>
+        <Typography variant="body2"><b>Phone:</b> {user?.phone || "-"}</Typography>
+        <Typography variant="body2"><b>Gender:</b> {user?.gender || "-"}</Typography>
+        <Typography variant="body2"><b>Speciality:</b> {user?.speciality || "-"}</Typography>
+        <Typography variant="body2"><b>Hospital Name:</b> {user?.hospital_name || "-"}</Typography>
+        <Typography variant="body2"><b>Lab Name:</b> {user?.lab_name || "-"}</Typography>
+        <Typography variant="body2"><b>Experience:</b> {user?.experience || "-"}</Typography>
+        <Typography variant="body2"><b>City:</b> {user?.city || "-"}</Typography>
+        <Typography variant="body2"><b>District:</b> {user?.district || "-"}</Typography>
+        <Typography variant="body2"><b>State:</b> {user?.state || "-"}</Typography>
+        <Typography variant="body2"><b>PIN:</b> {user?.pin || "-"}</Typography>
+      </Box>
     </CardContent>
   </Card>
 );
 
-// Role-based sidebar renderer
 const RoleBasedSidebar = ({ role }) => {
   switch (role) {
     case "Doctor":
@@ -61,16 +76,21 @@ const RoleBasedSidebar = ({ role }) => {
 };
 
 const UserProfilePage = () => {
-  const { user } = useContext(AuthContext); // Get user from context
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Load full user object from localStorage
+    const storedUser = JSON.parse(localStorage.getItem("triksha_user"));
+    if (storedUser) setUser(storedUser);
+  }, []);
+
+  if (!user) return <Typography>Loading...</Typography>;
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-      {/* Header with dynamic user name */}
       <HeaderBar userName={user?.name || user?.email || "Guest"} />
 
-      {/* Sidebar + Main Content */}
       <Box sx={{ display: "flex", flex: 1, pt: "64px" }}>
-        {/* ✅ Sidebar changes based on role */}
         <RoleBasedSidebar role={user?.role} />
 
         <Box
@@ -82,7 +102,6 @@ const UserProfilePage = () => {
             background: "#FFF6FA",
           }}
         >
-          {/* Greeting */}
           <Typography
             variant="h5"
             fontWeight={700}
@@ -95,14 +114,9 @@ const UserProfilePage = () => {
             </span>
           </Typography>
 
-          {/* Profile + Activity */}
           <Grid container spacing={3} mb={4}>
             <Grid item xs={12} md={4}>
-              <UserProfileCard
-                name={user?.name}
-                email={user?.email}
-                role={user?.role}
-              />
+              <UserProfileCard user={user} />
             </Grid>
             <Grid item xs={12} md={8}>
               <Card sx={{ p: 3, borderRadius: 1 }}>
@@ -110,15 +124,14 @@ const UserProfilePage = () => {
                   Recent Activity
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  • Logged in today at 9:00 AM <br />
-                  • Updated profile yesterday <br />
-                  • Booked 2 appointments last week
+                  • Logged in today <br />
+                  • Updated profile recently <br />
+                  • Booked appointments
                 </Typography>
               </Card>
             </Grid>
           </Grid>
 
-          {/* Quick Actions */}
           <Typography variant="h6" mb={2}>
             Quick Actions
           </Typography>

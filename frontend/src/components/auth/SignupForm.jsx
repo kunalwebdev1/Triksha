@@ -8,8 +8,6 @@ const roles = [
   "Patient",
   "Doctor",
   "Hospital/Clinic Admin",
-  // "Pharmacy Admin",
-  // "Caregiver",
   "Laboratory Admin",
   "Insurance TPA",
 ];
@@ -20,19 +18,37 @@ const SignupForm = () => {
     email: "",
     phone: "",
     role: "",
+    gender: "",
     password: "",
+    confirmPassword: "", // ✅ Added confirm password
+    city: "",
+    district: "",
+    state: "",
+    pin: "",
+    // role-specific
+    speciality: "",
+    hospitalName: "",
+    labName: "",
+    experience: "",
   });
-  const [errors, setErrors] = useState("");
+
+  const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" });
-  };
-   const validateForm = () => {
-    let newErrors = {};
 
+    // ✅ Remove password mismatch error while typing
+    if (e.target.name === "password" || e.target.name === "confirmPassword") {
+      setErrors((prev) => ({ ...prev, confirmPassword: "" }));
+    } else {
+      setErrors({ ...errors, [e.target.name]: "" });
+    }
+  };
+
+  const validateForm = () => {
+    let newErrors = {};
     if (!form.name.trim()) newErrors.name = "Full name is required.";
     if (!form.email) {
       newErrors.email = "Email is required.";
@@ -50,25 +66,60 @@ const SignupForm = () => {
     } else if (form.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters.";
     }
+    if (!form.confirmPassword) {
+      newErrors.confirmPassword = "Please confirm your password.";
+    } else if (form.password !== form.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match.";
+    }
+    if (!form.city) newErrors.city = "City is required.";
+    if (!form.district) newErrors.district = "District is required.";
+    if (!form.state) newErrors.state = "State is required.";
+    if (!form.pin) newErrors.pin = "PIN is required.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSuccess("");
-if (!validateForm()) return;
+  e.preventDefault();
+  setSuccess("");
+  if (!validateForm()) return;
 
-    try {
-      await signup(form);
-      setSuccess("Signup successful! Redirecting to login...");
-      setTimeout(() => navigate("/login"), 200);
-    } catch (err) {
-      setErrors(err.response?.data?.detail || "Signup failed. Please try again.");
-      setErrors({ general: backendError });
+  try {
+    const payload = {
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      role: form.role,
+      gender: form.gender,
+      password: form.password,
+      confirm_password: form.confirmPassword, // required for all
+      city: form.city,
+      district: form.district,
+      state: form.state,
+      pin: form.pin,
+    };
+
+    // Include role-specific fields only if applicable
+    if (form.role === "Doctor") {
+      payload.speciality = form.speciality;
+      payload.hospital_name = form.hospitalName;
+      payload.experience = form.experience ? parseInt(form.experience, 10) : 0;
+    } else if (form.role === "Hospital/Clinic Admin") {
+      payload.hospital_name = form.hospitalName;
+    } else if (form.role === "Laboratory Admin") {
+      payload.lab_name = form.labName;
     }
-  };
+
+    await signup(payload);
+    setSuccess("Signup successful! Redirecting to login...");
+    setTimeout(() => navigate("/login"), 200);
+  } catch (err) {
+    const backendError = err.response?.data?.detail || "Signup failed. Please try again.";
+    setErrors({ general: backendError });
+  }
+};
+
 
   return (
     <Box
@@ -83,7 +134,7 @@ if (!validateForm()) return;
         p: { xs: 1, sm: 2 },
       }}
     >
-      {/* Left branding section */}
+      {/* Left Branding */}
       <Box
         sx={{
           flex: 1,
@@ -94,26 +145,16 @@ if (!validateForm()) return;
           mb: { xs: 4, md: 0 },
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            mb: 1,
+        <img
+          src={tlogo}
+          alt="Triksha"
+          style={{
+            width: "100%",
+            maxWidth: 500,
+            minWidth: 180,
+            marginBottom: 8,
           }}
-        >
-          <img
-            src={tlogo}
-            alt="Triksha"
-            style={{
-              width: "100%",
-              maxWidth: 500,
-              minWidth: 180,
-              marginBottom: 8,
-            }}
-          />
-        </Box>
+        />
         <Typography
           sx={{
             fontSize: { xs: 18, sm: 20, md: 22 },
@@ -127,7 +168,7 @@ if (!validateForm()) return;
         </Typography>
       </Box>
 
-      {/* Right signup form section */}
+      {/* Signup Form */}
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -148,22 +189,14 @@ if (!validateForm()) return;
         <Typography variant="h5" align="center" fontWeight={700} mb={3}>
           Sign Up
         </Typography>
-        {errors.general && (
-          <Typography color="error" mb={1}>
-            {errors.general}
-          </Typography>
-        )}
-        {success && (
-          <Typography color="success.main" mb={1}>
-            {success}
-          </Typography>
-        )}
-        <Typography fontWeight={500} mb={0.5}>
-          Full Name
-        </Typography>
+
+        {errors.general && <Typography color="error">{errors.general}</Typography>}
+        {success && <Typography color="success.main">{success}</Typography>}
+
+        {/* Name */}
+        <Typography fontWeight={500} mb={0.5}>Full Name</Typography>
         <TextField
           fullWidth
-          response
           margin="none"
           placeholder="Enter Your Full Name"
           name="name"
@@ -173,13 +206,30 @@ if (!validateForm()) return;
           error={!!errors.name}
           helperText={errors.name}
         />
-        <Typography fontWeight={500} mt={2} mb={0.5}>
-          Email
-        </Typography>
+
+        {/* Gender */}
+        <Typography fontWeight={500} mt={2} mb={0.5}>Gender</Typography>
+        <TextField
+          select
+          fullWidth
+          margin="none"
+          name="gender"
+          placeholder="Select"
+          value={form.gender}
+          onChange={handleChange}
+          size="small"
+        >
+          <MenuItem value="Male">Male</MenuItem>
+          <MenuItem value="Female">Female</MenuItem>
+          <MenuItem value="Other">Other</MenuItem>
+        </TextField>
+
+        {/* Email */}
+        <Typography fontWeight={500} mt={2} mb={0.5}>Email</Typography>
         <TextField
           fullWidth
           margin="none"
-          placeholder="Enter Email Id"
+          placeholder="Enter Your Email Id"
           name="email"
           value={form.email}
           onChange={handleChange}
@@ -187,9 +237,9 @@ if (!validateForm()) return;
           error={!!errors.email}
           helperText={errors.email || "Use a valid email address."}
         />
-        <Typography fontWeight={500} mt={2} mb={0.5}>
-          Phone Number
-        </Typography>
+
+        {/* Phone */}
+        <Typography fontWeight={500} mt={2} mb={0.5}>Phone Number</Typography>
         <TextField
           fullWidth
           margin="none"
@@ -201,15 +251,14 @@ if (!validateForm()) return;
           error={!!errors.phone}
           helperText={errors.phone}
         />
-        <Typography fontWeight={500} mt={2} mb={0.5}>
-          Role 
-        </Typography>
+
+        {/* Role */}
+        <Typography fontWeight={500} mt={2} mb={0.5}>Role</Typography>
         <TextField
           select
           fullWidth
-          margin="none"
-          placeholder="Select Usecase"
           name="role"
+          placeholder="Select Your Primary Role"
           value={form.role}
           onChange={handleChange}
           size="small"
@@ -217,49 +266,42 @@ if (!validateForm()) return;
           helperText={errors.role || "Please select your primary role."}
         >
           {roles.map((role) => (
-            <MenuItem key={role} value={role}>
-              {role}
-            </MenuItem>
+            <MenuItem key={role} value={role}>{role}</MenuItem>
           ))}
         </TextField>
-        <Typography fontWeight={500} mt={2} mb={0.5}>
-          Password
-        </Typography>
-        <TextField
-          fullWidth
-          type="password"
-          margin="none"
-          placeholder="Create Password"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-          size="small"
-          error={!!errors.password}
-          helperText={errors.password || "Password must be at least 6 characters."}
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          fullWidth
-          sx={{
-            mt: 3,
-            background: "#F7CFE1",
-            color: "#222",
-            fontWeight: 700,
-            borderRadius: 3,
-            fontSize: "1.1rem",
-            boxShadow: "0 4px 8px #f7cfe1a0",
-            py: 1.5,
-            "&:hover": { background: "#FFD8E4" },
-          }}
-        >
+
+        {/* Location */}
+        <Typography fontWeight={600} mt={3}>Location</Typography>
+        <TextField fullWidth name="city" placeholder="City" value={form.city} onChange={handleChange} size="small" error={!!errors.city} helperText={errors.city} sx={{ mt: 1 }}/>
+        <TextField fullWidth name="district" placeholder="District" value={form.district} onChange={handleChange} size="small" error={!!errors.district} helperText={errors.district} sx={{ mt: 1 }}/>
+        <TextField fullWidth name="state" placeholder="State" value={form.state} onChange={handleChange} size="small" error={!!errors.state} helperText={errors.state} sx={{ mt: 1 }}/>
+        <TextField fullWidth name="pin" placeholder="PIN Code" value={form.pin} onChange={handleChange} size="small" error={!!errors.pin} helperText={errors.pin} sx={{ mt: 1 }}/>
+
+        {/* Role-specific */}
+        {form.role === "Doctor" && <>
+          <TextField fullWidth name="speciality" placeholder="Speciality" value={form.speciality} onChange={handleChange} size="small" sx={{ mt: 2 }}/>
+          <TextField fullWidth name="hospitalName" placeholder="Hospital/Clinic Name" value={form.hospitalName} onChange={handleChange} size="small" sx={{ mt: 1 }}/>
+          <TextField fullWidth name="experience" placeholder="Experience (Years)" value={form.experience} onChange={handleChange} size="small" sx={{ mt: 1 }}/>
+        </>}
+        {form.role === "Hospital/Clinic Admin" && <TextField fullWidth name="hospitalName" placeholder="Hospital/Clinic Name" value={form.hospitalName} onChange={handleChange} size="small" sx={{ mt: 2 }}/>}
+        {form.role === "Laboratory Admin" && <TextField fullWidth name="labName" placeholder="Laboratory Name" value={form.labName} onChange={handleChange} size="small" sx={{ mt: 2 }}/>}
+        
+        {/* Password */}
+        <Typography fontWeight={500} mt={2} mb={0.5}>Password</Typography>
+        <TextField fullWidth type="password" placeholder="Create Password" name="password" value={form.password} onChange={handleChange} size="small" error={!!errors.password} helperText={errors.password || "Password must be at least 6 characters."}/>
+
+        {/* Confirm Password */}
+        <Typography fontWeight={500} mt={2} mb={0.5}>Confirm Password</Typography>
+        <TextField fullWidth type="password" placeholder="Confirm Password" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} size="small" error={!!errors.confirmPassword} helperText={errors.confirmPassword}/>
+
+        <Button type="submit" variant="contained" fullWidth sx={{
+          mt: 3, background: "#F7CFE1", color: "#222", fontWeight: 700, borderRadius: 3, fontSize: "1.1rem", boxShadow: "0 4px 8px #f7cfe1a0", py: 1.5, "&:hover": { background: "#FFD8E4" }
+        }}>
           Create Account
         </Button>
+
         <Typography align="center" mt={3} fontSize={14}>
-          Already User?{" "}
-          <Link href="/login" underline="hover" color="#B2005E" fontWeight={600}>
-            Login Here
-          </Link>
+          Already User? <Link href="/login" underline="hover" color="#B2005E" fontWeight={600}>Login Here</Link>
         </Typography>
       </Box>
     </Box>
