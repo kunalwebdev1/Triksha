@@ -48,7 +48,7 @@ function DashboardRedirect() {
 export default function AppRouter() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/splash" />} />
+      <Route path="/triksha/" element={<Navigate to="/splash" />} />
       <Route path="/splash" element={<Splash />} />
       <Route path="/login" element={<LoginForm />} />
       <Route path="/signup" element={<SignupForm />} />
